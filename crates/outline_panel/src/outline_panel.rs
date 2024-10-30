@@ -3997,7 +3997,7 @@ impl Render for OutlinePanel {
             };
 
             v_flex()
-                .justify_center()
+                .flex_1()
                 .size_full()
                 .child(h_flex().justify_center().child(Label::new(header)))
                 .when_some(query.clone(), |panel, query| {
@@ -4172,7 +4172,7 @@ impl Render for OutlinePanel {
         v_flex()
             .id("outline-panel")
             .size_full()
-            .justify_between()
+            .overflow_hidden()
             .relative()
             .on_hover(cx.listener(|this, hovered, cx| {
                 if *hovered {
@@ -4220,10 +4220,8 @@ impl Render for OutlinePanel {
             .when_some(search_query, |outline_panel, search_state| {
                 outline_panel.child(
                     v_flex()
-                        .size_full()
-                        .flex_1()
-                        .flex_grow()
-                        .flex_shrink_0()
+                        .w_full()
+                        .flex_none()
                         .mx_2()
                         .child(
                             Label::new(format!("Searching: '{}'", search_state.query))
@@ -4232,19 +4230,22 @@ impl Render for OutlinePanel {
                         .child(horizontal_separator(cx)),
                 )
             })
-            .child(panel_contents)
             .child(
                 v_flex()
+                    .w_full()
                     .flex_1()
-                    .flex_grow()
-                    .flex_shrink_0()
-                    .size_full()
+                    .overflow_hidden()
+                    .child(panel_contents),
+            )
+            .child(
+                v_flex()
+                    .w_full()
+                    .flex_none()
                     .child(horizontal_separator(cx))
                     .child(
-                        // TODO kb rework, has to be below the panel, to avoid scroll overlaps
                         h_flex()
                             .p_2()
-                            .size_full()
+                            .w_full()
                             .child(self.filter_editor.clone())
                             .child(
                                 div().child(
